@@ -151,8 +151,40 @@ def display_enemy_stats():
     print("Inventory: " + str(Enemy_1["Inventory"]))
     
 def display_current_map():
-    print("Current Room: " + current_room)
-    print(Space_station[current_room]["Description"])
+    map_layout = ["Airlock", "Cargohold", "Armoury", "Hallway", "Medbay", "Canteen/Crew Quarters", "Control Room"]
+    map = [" ", " ", " ", " ", " ", " ", " "]
+    
+    for i, room in enumerate(map_layout):
+        if current_room == room:
+            map[i] = "x"
+    
+    print("                ")
+    print("                        Cargohold                                                                          ")
+    print("                     ..:::::::::::::::         Airlock                                                      ")
+    print("                     .-              -      -.........:                                              ")
+    print("                     .-    " + map[1] + "          -......-   " + map[0] + "      :                                              ")
+    print("                     .-              -      -:-::::::::       Medbay                                      ")
+    print("                     .......:-::......       .+     .      =************=                            ")
+    print("                            ::..             .+     .      .            =                            ")
+    print("                            ::..             .+     .......:    " + map[4] + "        =                            ")
+    print("                       .+---=++=----         .+     ........            =                            ")
+    print("                       .-          :::::::::::+     .      .:::::::::::::                            ")
+    print("                       .-   " + map[2] + "       :----------+     .                                                ")
+    print("                       .------------       H .+ " + map[3] + "    .      .............:                            ")
+    print("                        Armoury            A .+     .      -            +                            ")
+    print("                                           L .+     :::::::*.      " + map[5] + "     +                            ")
+    print("                                           L .+     :......-.           +                            ")
+    print("                                           W .+     .      -            +                            ")
+    print("                                           A .+     .      .............:                            ")
+    print("                                           Y .-:+:-::     Canteen/Crew Quarters                                      ")
+    print("                                                + :                                                  ")
+    print("                                                + :                                                  ")
+    print("                                          -.....-::.....-.                                           ")
+    print("                                          =             =.                                           ")
+    print("                                          =     " + map[6] + "        =.                                           ")
+    print("                                          =             =.                                           ")
+    print("                                          -.............-.                                           ")
+    print("                                            Control Room")                                                  
 
 
 def attack_enemy():
