@@ -189,3 +189,22 @@ def is_enemy_dead():
         return False
     
 
+def move_to_room(new_room):
+    global current_room
+    if new_room in Space_station[current_room]["connections"]:
+        current_room = new_room
+        display_current_map()
+    else:
+        print("You can't move to " + new_room)
+        print("\n")
+        
+def start_game():
+    print("Welcome to Game")
+    print("\n")
+    display_current_map()
+    display_player_stats()
+    time.sleep(1)
+    while True:
+        commmand = input("What would you like to do?")
+                
+
