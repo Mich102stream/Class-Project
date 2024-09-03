@@ -189,6 +189,29 @@ def is_enemy_dead():
         return False
     
 
+def search_room():
+    print("You search the room.")
+    print("\n")
+    time.sleep(1)
+    items = {
+        "Airlock": ["Keycard"],
+        "Cargohold": ["Weapon"],
+        "Armoury": ["Weapon"],
+        "Medbay": ["Health Pack"],
+        "Canteen/Crew Quarters": ["Health Pack"],
+        "Control Room": ["Weapon"],
+    }
+    if current_room in items:
+        found_items = items[current_room]
+        for item in found_items:
+            print("You find a " + item + ".")
+            print("\n")
+            Player["Inventory"].append(item)
+    else:
+        print("You find nothing.")
+        print("\n")
+
+
 def move_to_room(new_room):
     global current_room
     if new_room in Space_station[current_room]["connections"]:
@@ -205,6 +228,34 @@ def start_game():
     display_player_stats()
     time.sleep(1)
     while True:
-        commmand = input("What would you like to do?")
-                
+        command = input("What would you like to do? ")
+        if command == "move":
+            new_room = input("Enter the room to move to: ").strip()
+            move_to_room(new_room)
+        elif command == "stats":
+            display_player_stats()
+        elif command == "quit":
+            print("Thanks for playing!")
+        elif command == "search":
+            search_room()
+        elif command == "use":
+            item = input("Enter the item to use: ").strip()
+            if item in Player["Inventory"]:
+                print("You use the " + item + ".")
+                Player["Inventory"].remove(item)
+                if item == "medpack":
+                    Player["Health"] = 100
+                elif item == "weapon":
+                    Player["Attack"] = +20
+                else:
+                    print("You can't use that item.")
+            else:
+                print("You don't have a " + item + ".")
+            print("\n")
+        else:
+            print("Invalid command.")
+            print("\n")       
+        
+    
+start_game()        
 
