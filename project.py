@@ -4,55 +4,6 @@ import time
 
 # Game Variables
 
-Space_station = {
-    "Airlock": {
-        "Description": "You are in the airlock. You can go to the hallway or the cargohold.",
-        "items": ["test_item", "medpack"],
-        "enemies": [""],
-        "connections": ["Hallway", "Cargohold"]
-    },
-    "Hallway": {
-        "Description": "You are in the hallway. You can go to the control room, medbay or the airlock.",
-        "items": ["test_item"],
-        "enemies": [""],
-        "connections": ["Armoury", "Medbay", "Airlock","Canteen/Crew Quarters", "Control Room"]
-    },
-    "Cargohold": {
-        "Description": "You are in the cargohold. You can go to the airlock or the armoury.",
-        "items": ["test_item", "Keycard"],
-        "enemies": [""],
-        "connections": ["Airlock", "Armoury"]
-    },
-    "Armoury": {
-        "Description": "You are in the armoury. You can go to the cargohold or the hallway.",
-        "items": ["test_item"],
-        "enemies": [""],
-        "connections": ["Cargohold", "Hallway"]
-    },
-    "Medbay": {
-        "Description": "You are in the medbay. You can go to the hallway.",
-        "items": ["test_item"],
-        "enemies": [""],
-        "connections": ["Hallway"]
-    },
-    "Canteen/Crew Quarters": {
-        "Description": "You are in the canteen/crew quarters. You can go to the hallway.",
-        "items": ["test_item"],
-        "enemies": [""],
-        "connections": ["Hallway"]
-    },
-    "Control Room": {
-        "Description": "You are in the control room. You can go to the hallway.",
-        "items": ["test_item"],
-        "enemies": [""],
-        "connections": ["Hallway"],
-        "Requied Keycard": True
-    }
-
-}
-
-
-
 current_room = "Airlock"
 
 # Player Stats
@@ -133,6 +84,53 @@ Enemy_Boss = {
     "Inventory": []
 }
 
+Space_station = {
+    "Airlock": {
+        "Description": "You are in the airlock. You can go to the hallway or the cargohold.",
+        "items": ["test_item", "medpack"],
+        "enemies": [Enemy_1],
+        "connections": ["Hallway", "Cargohold"]
+    },
+    "Hallway": {
+        "Description": "You are in the hallway. You can go to the control room, medbay or the airlock.",
+        "items": ["test_item"],
+        "enemies": [],
+        "connections": ["Armoury", "Medbay", "Airlock","Canteen/Crew Quarters", "Control Room"]
+    },
+    "Cargohold": {
+        "Description": "You are in the cargohold. You can go to the airlock or the armoury.",
+        "items": ["test_item", "Keycard"],
+        "enemies": [],
+        "connections": ["Airlock", "Armoury"]
+    },
+    "Armoury": {
+        "Description": "You are in the armoury. You can go to the cargohold or the hallway.",
+        "items": ["test_item"],
+        "enemies": [Enemy_2],
+        "connections": ["Cargohold", "Hallway"]
+    },
+    "Medbay": {
+        "Description": "You are in the medbay. You can go to the hallway.",
+        "items": ["test_item"],
+        "enemies": [],
+        "connections": ["Hallway"]
+    },
+    "Canteen/Crew Quarters": {
+        "Description": "You are in the canteen/crew quarters. You can go to the hallway.",
+        "items": ["test_item"],
+        "enemies": [Enemy_3],
+        "connections": ["Hallway"]
+    },
+    "Control Room": {
+        "Description": "You are in the control room. You can go to the hallway.",
+        "items": ["test_item"],
+        "enemies": [Enemy_Boss],
+        "connections": ["Hallway"],
+        "Requied Keycard": True
+    }
+
+}
+
 
 
 def main_menu():
@@ -149,10 +147,11 @@ def main_menu():
         main_menu()
         
 def choose_character():
+    global Player
     print("Choose a character:")
-    print("1. Character 1")
-    print("2. Character 2")
-    print("3. Character 3")
+    print("1. " + Character_1["Name"])
+    print("2. " + Character_2["Name"])
+    print("3. " + Character_3["Name"])
     choice = input("Enter choice (1, 2, 3): ")
     if choice == "1":
         Player = Character_1
@@ -171,6 +170,7 @@ def choose_character():
     return Player
 
 def display_player_stats():
+    global Player
     print("Player Stats:")
     print("Name: " + Player["Name"])
     print("Health: " + str(Player["Health"]))
@@ -246,15 +246,13 @@ def attack_player():
 
     
 def is_player_dead():
-    if Player["health"] <= 0:
-        print("You are dead")
+    if Player["Health"] <= 0:
         return True
     else:
         return False
     
 def is_enemy_dead():
-    if Enemy_1["health"] or Enemy_2["health"] or Enemy_3["health"] <= 0:
-        print("Enemy is dead")
+    if Enemy_1["Health"] or Enemy_2["Health"] or Enemy_3["Health"] <= 0:
         return True
     else:
         return False
@@ -266,6 +264,7 @@ def search_room():
     print("\n")
     time.sleep(1)
     items = Space_station[current_room]["items"]
+    enemies = Space_station[current_room]["enemies"]
     
     if items:
         for item in items:
@@ -276,6 +275,12 @@ def search_room():
     else:
         print("You find nothing.")
         print("\n")
+    
+    if enemies:
+        for enemy in enemies:
+            print("You encounter an enemy: " + enemy["Name"] + ".")
+            print("\n")
+            enemies.remove(enemy)
 
 
 def move_to_room(new_room):
@@ -378,9 +383,18 @@ def start_game():     # start the game
             else:
                 print("You don't have a " + item + ".")
             print("\n")
+        elif command == "attack":   # attack the enemy
+            attack_enemy()
+            if is_enemy_dead():
+                print("Enemy is dead.")
+            else:
+                attack_player()
+                if is_player_dead():
+                    print("You are dead.")
+                    break
         else:
             print("Invalid command.")
-            print("\n")       
+            print("\n")
         
 
 # runs the game    
