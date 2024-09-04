@@ -15,7 +15,7 @@ Player = {
 }
 
 Character_1 = {
-    "Name": "Player",
+    "Name": "Ronan",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -24,7 +24,7 @@ Character_1 = {
 }
 
 Character_2 = {
-    "Name": "Player",
+    "Name": "Julia",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -34,7 +34,7 @@ Character_2 = {
 
 
 Character_3 = {
-    "Name": "Player",
+    "Name": "Lee",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -46,7 +46,7 @@ Character_3 = {
 # Enemy Stats
 
 Enemy_1 = {
-    "Name": "Enemy",
+    "Name": "Kyle",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -55,7 +55,7 @@ Enemy_1 = {
 }
 
 Enemy_2 = {
-    "Name": "Enemy",
+    "Name": "Patrick",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -64,7 +64,7 @@ Enemy_2 = {
 }
 
 Enemy_3 = {
-    "Name": "Enemy",
+    "Name": "Tristen",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -73,7 +73,7 @@ Enemy_3 = {
 }
 
 Enemy_Boss = {
-    "Name": "Enemy Boss",
+    "Name": "Michael",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -135,7 +135,7 @@ def main_menu():
     print("Welcome to the Space Station Game")
     print("1. Start Game")
     print("2. Exit Game")
-    choice = input("Enter choice (1, 2): ")
+    choice = input("Enter choice: ")
     if choice == "1":
         start_game()
     elif choice == "2":
@@ -149,7 +149,7 @@ def choose_character():
     print("1. Character 1")
     print("2. Character 2")
     print("3. Character 3")
-    choice = input("Enter choice (1, 2, 3): ")
+    choice = input("Enter choice: ")
     if choice == "1":
         Player = Character_1
     elif choice == "2":
