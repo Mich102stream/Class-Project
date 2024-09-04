@@ -277,23 +277,19 @@ def search_room():
     print("You search the room.")
     print("\n")
     time.sleep(1)
-    items = {
-        "Airlock": ["Keycard"],
-        "Cargohold": ["Weapon"],
-        "Armoury": ["Weapon"],
-        "Medbay": ["Health Pack"],
-        "Canteen/Crew Quarters": ["Health Pack"],
-        "Control Room": ["Weapon"],
-    }
-    if current_room in items:
-        found_items = items[current_room]
-        for item in found_items:
-            print("You find a " + item + ".")
-            print("\n")
-            Player["Inventory"].append(item)
+   
+    room_items = Space_station[current_room]["items"]
+   
+    if room_items:
+        for item in room_items:
+            if item not in Player["Inventory"]:
+                print("You find a " + item + ".")
+                Player["Inventory"].append(item)
+            else:
+                print("You already have a " + item + ".")
     else:
         print("You find nothing.")
-        print("\n")
+    print("\n")
 
 
 def move_to_room(new_room):
