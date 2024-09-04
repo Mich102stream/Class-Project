@@ -7,7 +7,7 @@ import time
 Space_station = {
     "Airlock": {
         "Description": "You are in the airlock. You can go to the hallway or the cargohold.",
-        "items": ["test_item"],
+        "items": ["test_item", "medpack"],
         "enemies": [""],
         "connections": ["Hallway", "Cargohold"]
     },
@@ -19,7 +19,7 @@ Space_station = {
     },
     "Cargohold": {
         "Description": "You are in the cargohold. You can go to the airlock or the armoury.",
-        "items": ["test_item"],
+        "items": ["test_item", "Keycard"],
         "enemies": [""],
         "connections": ["Airlock", "Armoury"]
     },
@@ -50,6 +50,8 @@ Space_station = {
     }
 
 }
+
+
 
 current_room = "Airlock"
 
@@ -259,18 +261,18 @@ def is_enemy_dead():
     
 
 def search_room():
+    global current_room
     print("You search the room.")
     print("\n")
     time.sleep(1)
-    items = current_room["items"]
+    items = Space_station[current_room]["items"]
     
-    if current_room in items:
-        found_items = items[current_room]
-        for item in found_items:
+    if items:
+        for item in items:
             print("You find a " + item + ".")
             print("\n")
             Player["Inventory"].append(item)
-            current_room["items"].remove(item)
+            items.remove(item)
     else:
         print("You find nothing.")
         print("\n")
@@ -278,6 +280,7 @@ def search_room():
 
 def move_to_room(new_room):
     global current_room
+    global Space_station
     if new_room in Space_station[current_room]["connections"]:
         current_room = new_room
         display_current_map()
@@ -326,7 +329,6 @@ def start_game():     # start the game
     choose_character()  # choose a character
     display_current_map()   # prints the map of the space station X marking spot of player.
     display_player_stats()  # displays the player stats
-    current_room = Space_station["Airlock"]  # sets the current room to the airlock
     time.sleep(1)
     while True:
         command = input("What would you like to do? ")
