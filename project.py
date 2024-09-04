@@ -135,7 +135,7 @@ def main_menu():
     print("Welcome to the Space Station Game")
     print("1. Start Game")
     print("2. Exit Game")
-    choice = input("Enter choice: ")
+    choice = input("Enter choice (1, 2): ")
     if choice == "1":
         start_game()
     elif choice == "2":
@@ -149,7 +149,7 @@ def choose_character():
     print("1. Character 1")
     print("2. Character 2")
     print("3. Character 3")
-    choice = input("Enter choice: ")
+    choice = input("Enter choice (1, 2, 3): ")
     if choice == "1":
         Player = Character_1
     elif choice == "2":
