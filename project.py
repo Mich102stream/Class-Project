@@ -131,6 +131,41 @@ Space_station = {
 
 current_room = "Airlock"
 
+def main_menu():
+    print("Welcome to the Space Station Game")
+    print("1. Start Game")
+    print("2. Exit Game")
+    choice = input("Enter choice: ")
+    if choice == "1":
+        start_game()
+    elif choice == "2":
+        print("Goodbye!")
+    else:
+        print("Invalid choice.")
+        main_menu()
+        
+def choose_character():
+    print("Choose a character:")
+    print("1. Character 1")
+    print("2. Character 2")
+    print("3. Character 3")
+    choice = input("Enter choice: ")
+    if choice == "1":
+        Player = Character_1
+    elif choice == "2":
+        Player = Character_2
+    elif choice == "3":
+        Player = Character_3
+    else:
+        print("Invalid choice.")
+        choose_character()
+        
+    print("You have chosen " + Player["Name"] + ".")
+    print("\n")
+    time.sleep(1)
+    
+    return Player
+
 def display_player_stats():
     print("Player Stats:")
     print("Name: " + Player["Name"])
@@ -291,6 +326,7 @@ def move_to_room(new_room):
 def start_game():     # start the game
     print("Welcome to Game")  # welcome message
     print("\n")
+    choose_character()  # choose a character
     display_current_map()   # prints the map of the space station X marking spot of player.
     display_player_stats()  # displays the player stats
     time.sleep(1)
@@ -348,6 +384,6 @@ def start_game():     # start the game
         
 
 # runs the game    
-start_game()        
+main_menu()       
 
 # End of project.py
