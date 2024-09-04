@@ -51,7 +51,7 @@ Space_station = {
 
 }
 
-current_room = Space_station["Airlock"]
+current_room = "Airlock"
 
 # Player Stats
 
@@ -65,7 +65,7 @@ Player = {
 }
 
 Character_1 = {
-    "Name": "Player",
+    "Name": "Ronan",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -74,7 +74,7 @@ Character_1 = {
 }
 
 Character_2 = {
-    "Name": "Player",
+    "Name": "Julia",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -84,7 +84,7 @@ Character_2 = {
 
 
 Character_3 = {
-    "Name": "Player",
+    "Name": "Lee",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -96,7 +96,7 @@ Character_3 = {
 # Enemy Stats
 
 Enemy_1 = {
-    "Name": "Enemy",
+    "Name": "Patrick",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -105,7 +105,7 @@ Enemy_1 = {
 }
 
 Enemy_2 = {
-    "Name": "Enemy",
+    "Name": "Tristan",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -114,7 +114,7 @@ Enemy_2 = {
 }
 
 Enemy_3 = {
-    "Name": "Enemy",
+    "Name": "Kyle",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
@@ -123,7 +123,7 @@ Enemy_3 = {
 }
 
 Enemy_Boss = {
-    "Name": "Enemy Boss",
+    "Name": "Michael",
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
