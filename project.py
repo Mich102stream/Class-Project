@@ -253,32 +253,90 @@ def move_to_room(new_room):
         print("You can't move to " + new_room)
         print("\n")
         
-def start_game():
-    print("Welcome to Game")
+    if current_room == "Control Room":
+        if "Keycard" in Player["Inventory"]:
+            print("You enter the control room and find the enemy boss.")
+            print("\n")
+            time.sleep(1)
+            while True:
+                command = input("What would you like to do? ")
+                if command == "attack":
+                    attack_enemy()
+                    if is_enemy_dead():
+                        break
+                    attack_player()
+                    if is_player_dead():
+                        break
+                elif command == "use":
+                    item = input("Enter the item to use: ").strip()
+                    if item in Player["Inventory"]:
+                        print("You use the " + item + ".")
+                        Player["Inventory"].remove(item)
+                        if item == "medpack":
+                            Player["Health"] = 100
+                        elif item == "weapon":
+                            Player["Attack"] = +20
+                        else:
+                            print("You can't use that item.")
+                    else:
+                        print("You don't have a " + item + ".")
+                    print("\n")
+                else:
+                    print("Invalid command.")
+                    print("\n")
+        else:
+            print("You need a keycard to enter the control room.")
+            print("\n")
+        
+def start_game():     # start the game
+    print("Welcome to Game")  # welcome message
     print("\n")
-    display_current_map()
-    display_player_stats()
+    display_current_map()   # prints the map of the space station X marking spot of player.
+    display_player_stats()  # displays the player stats
     time.sleep(1)
     while True:
         command = input("What would you like to do? ")
-        if command == "move":
-            new_room = input("Enter the room to move to: ").strip()
-            move_to_room(new_room)
-        elif command == "stats":
+        if command == "move":                                           # move to a new room command but checks which room you are in and connects too
+            if current_room == "Airlock":
+                new_room = input("Enter the room to move to (Cargohold, Hallway): ").strip()
+                move_to_room(new_room)
+            elif current_room == "Cargohold":
+                new_room = input("Enter the room to move to (Airlock, Armoury): ").strip()
+                move_to_room(new_room)
+            elif current_room == "Armoury":
+                new_room = input("Enter the room to move to (Cargohold, Hallway): ").strip()
+                move_to_room(new_room)
+            elif current_room == "Hallway":
+                new_room = input("Enter the room to move to (Armoury, Medbay, Airlock, Canteen/Crew Quarters, Control Room): ").strip()
+                move_to_room(new_room)
+            elif current_room == "Medbay":
+                new_room = input("Enter the room to move to (Hallway): ").strip()
+                move_to_room(new_room)
+            elif current_room == "Canteen/Crew Quarters":
+                new_room = input("Enter the room to move to (Hallway): ").strip()
+                move_to_room(new_room)
+            elif current_room == "Control Room":
+                new_room = input("Enter the room to move to (Hallway): ").strip()
+                move_to_room(new_room)
+        elif command == "stats":  # display player stats
             display_player_stats()
-        elif command == "quit":
+        elif command == "quit":    # quit the game
             print("Thanks for playing!")
-        elif command == "search":
+            break
+        elif command == "search":  # search the room for items
             search_room()
-        elif command == "use":
+        elif command == "use":    # allows you to use a item in inventory
+            print(f"Inventory: {Player['Inventory']}")
             item = input("Enter the item to use: ").strip()
-            if item in Player["Inventory"]:
+            if item in Player["Inventory"]:    # checks if item is in inventory
                 print("You use the " + item + ".")
                 Player["Inventory"].remove(item)
                 if item == "medpack":
                     Player["Health"] = 100
+                    print("You have used the medpack.")
                 elif item == "weapon":
                     Player["Attack"] = +20
+                    print("You have equipped the weapon.")
                 else:
                     print("You can't use that item.")
             else:
@@ -288,6 +346,8 @@ def start_game():
             print("Invalid command.")
             print("\n")       
         
-    
+
+# runs the game    
 start_game()        
 
+# End of project.py
