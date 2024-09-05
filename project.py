@@ -79,47 +79,60 @@ Enemy_Boss = {
 
 Space_station = {
     "Airlock": {
-        "Description": "The airlock consists of two heavy, reinforced doors, each a solid slab of metal with a network of deep rivets and reinforced joints. The outer door is slightly ajar, creaking as it swings on its rusted hinges. The inner door of the airlock is slightly closed, but its seals are visibly worn and cracked. A large control panel is mounted beside the inner door, its once-digital display now shattered, the buttons and switches all unresponsive.",
+        "Description": """The airlock consists of two heavy, reinforced doors, each a solid slab of metal with a network of deep rivets and reinforced joints. 
+        The outer door is slightly ajar, creaking as it swings on its rusted hinges. 
+        The inner door of the airlock is slightly closed, but its seals are visibly worn and cracked. 
+        A large control panel is mounted beside the inner door, its once-digital display now shattered, the buttons and switches all unresponsive.""",
         "items": ["test_item", "medpack"],
         "enemies": [Enemy_1],
         "connections": ["Hallway", "Cargohold"]
     },
     "Hallway": {
-        "Description": "The hallway of the abandoned space station stretches out in eerie silence Cables and wires hang loosely from open panels in the ceiling. The walls, once pristine and white, are now stained with patches of blood and peeling paint.",
+        "Description": """The hallway of the abandoned space station stretches out in eerie silence. 
+        Cables and wires hang loosely from open panels in the ceiling. 
+        The walls, once pristine and white, are now stained with patches of blood and peeling paint.""",
         "items": ["test_item"],
         "enemies": [],
         "connections": ["Armoury", "Medbay", "Airlock","Canteen/Crew Quarters", "Control Room"]
     },
     "Cargohold": {
-        "Description": "The cargohold is dimly lit chamber that feels both vast and claustrophobic. The space is filled with towering stacks of metal crates and containers, some secured with rusting chains, while others have toppled over, spilling their contents across the floor. The crates are marked with faded labels and symbols from various worlds and corporations, now unreadable through layers of dust.",
+        "Description": """The cargohold is a dimly lit chamber that feels both vast and claustrophobic. 
+        The space is filled with towering stacks of metal crates and containers, some secured with rusting chains, while others have toppled over, spilling their contents across the floor. 
+        The crates are marked with faded labels and symbols from various worlds and corporations, now unreadable through layers of dust.""",
         "items": ["Wrench","Rations","Ammo"],
-        "enemies": [],
+        "enemies": [Enemy_1],
         "connections": ["Airlock", "Armoury"]
     },
     "Armoury": {
-        "Description": "The armoury of the abandoned space station is lined with rows of weapon racks, now mostly empty. The walls are reinforced with thick, riveted steel plates, designed to contain any accidents or breaches.",
+        "Description": """The armoury of the abandoned space station is lined with rows of weapon racks, now mostly empty. 
+        The walls are reinforced with thick, riveted steel plates, designed to contain any accidents or breaches.""",
         "items": ["Laser pistol", "Armoured Vest", "Helmet"],
         "enemies": [Enemy_2],
         "connections": ["Cargohold", "Hallway"]
     },
     "Medbay": {
-        "Description": "The medbay The once-sterile environment is now tainted by decay and neglect. rows of medical beds line the room, their sheets torn and discoloured, some with ancient bloodstains that have darkened to a rusty brown. the air is thick with the smell of antiseptic mixed with the musty odour of decay.",
+        "Description": """The medbay, once a sterile environment, is now tainted by decay and neglect. 
+        Rows of medical beds line the room, their sheets torn and discoloured, some with ancient bloodstains that have darkened to a rusty brown. 
+        The air is thick with the smell of antiseptic mixed with the musty odour of decay.""",
         "items": ["Medpack"],
         "enemies": [],
         "connections": ["Hallway"]
     },
     "Canteen/Crew Quarters": {
-        "Description": "The canteen, once bustling with life, is now eerily silent. Metal tables and chairs are scattered haphazardly, some overturned as if left in a hurry. The once-bright LED lights flicker weakly, casting long, eerie shadows across the room.",
+        "Description": """The canteen, once bustling with life, is now eerily silent. 
+        Metal tables and chairs are scattered haphazardly, some overturned as if left in a hurry. 
+        The once-bright LED lights flicker weakly, casting long, eerie shadows across the room.""",
         "items": ["Rations"],
         "enemies": [Enemy_3],
         "connections": ["Hallway"]
     },
     "Control Room": {
-        "Description": "The control room is large, circular, and filled with rows of consoles and control panels that once managed the entire stations operations. Now, these consoles are lifeless, their screens cracked or completely dark, covered in a thick layer of dust.",
+        "Description": """The control room is large, circular, and filled with rows of consoles and control panels that once managed the entire station's operations. 
+        Now, these consoles are lifeless, their screens cracked or completely dark, covered in a thick layer of dust.""",
         "items": ["Alien Egg"],
         "enemies": [Enemy_Boss],
         "connections": ["Hallway"],
-        "Requied Keycard": True
+        "Required Keycard": True
     }
 
 }
@@ -299,6 +312,7 @@ def move_to_room(new_room):
         type_out("You move to " + new_room + ".")
         print("\n")
         type_out(Space_station[new_room]["Description"])
+        print("\n")
     else:
         type_out("You can't move to " + new_room)
         type_out("\n")
@@ -346,9 +360,10 @@ def start_game():     # start the game
     display_player_stats()  # displays the player stats
     type_out("You Enter the Airlock.")
     type_out(Space_station[current_room]["Description"])
+    print("\n")
     time.sleep(1)
     while True:
-        command = input("What would you like to do? ")
+        command = input("What would you like to do? (""move"", ""stats"", ""search"", ""use"", ""attack"", ""combine"", ""quit"", ""help""): ").strip()
         if command == "move":                                           # move to a new room command but checks which room you are in and connects too
             if current_room == "Airlock":
                 new_room = input("Enter the room to move to (Cargohold, Hallway): ")
@@ -426,7 +441,7 @@ def start_game():     # start the game
             type_out("Commands:")
             type_out("move - Move to a new room.")
             type_out("stats - Display player stats.")
-            type_out("search - Search the room for items.")
+            type_out("search - Search the room for items or enemies.")
             type_out("use - Use an item from your inventory.")
             type_out("attack - Attack the enemy.")
             type_out("combine - Combine items in your inventory.")
