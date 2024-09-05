@@ -265,16 +265,18 @@ def is_player_dead():
 def is_enemy_dead():
     if Enemy_1["Health"] <= 0:
         Player["Inventory"].extend(Enemy_1["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_1)
         return True
     elif Enemy_2["Health"] <= 0:
         Player["Inventory"].extend(Enemy_2["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_2)
         return True
     elif Enemy_3["Health"] <= 0:
         Player["Inventory"].extend(Enemy_3["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_3)
         return True
     else:
         return False
-    
 
 def search_room():
     global current_room
