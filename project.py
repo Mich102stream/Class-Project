@@ -236,6 +236,17 @@ def display_current_map():
     print("                                          -.............-.                                           ")
     print("                                            Control Room")                                                  
 
+def reset_enemies():
+    if Enemy_1["Health"] == 100:
+        Space_station["Airlock"]["enemies"].append(Enemy_1)
+    if Enemy_2["Health"] == 100:
+        Space_station["Armoury"]["enemies"].append(Enemy_2)
+    if Enemy_3["Health"] == 100:
+        Space_station["Canteen/Crew Quarters"]["enemies"].append(Enemy_3)
+    if Enemy_Boss["Health"] == 100:
+        Space_station["Control Room"]["enemies"].append(Enemy_Boss)
+    else:
+        pass
 
 def attack_enemy():
     Player_attack = Player["Attack"] - Enemy_1["Defence"]
@@ -310,6 +321,7 @@ def move_to_room(new_room):
     new_room = new_room.capitalize()
     if new_room in Space_station[current_room]["connections"]:
         current_room = new_room
+        reset_enemies()
         display_current_map()
         type_out("You move to " + new_room + ".")
         print("\n")
