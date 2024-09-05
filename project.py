@@ -50,7 +50,7 @@ Enemy_1 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Inventory": []
+    "Inventory": ["Keycard Fragment A"]
 }
 
 Enemy_2 = {
@@ -58,7 +58,7 @@ Enemy_2 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Inventory": []
+    "Inventory": ["Keycard Fragment B"]
 }
 
 Enemy_3 = {
@@ -66,7 +66,7 @@ Enemy_3 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Inventory": []
+    "Inventory": ["Keycard Fragment C"]
 }
 
 Enemy_Boss = {
@@ -74,7 +74,7 @@ Enemy_Boss = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Inventory": []
+    "Inventory": ["Alien Egg"]
 }
 
 Space_station = {
@@ -92,31 +92,31 @@ Space_station = {
     },
     "Cargohold": {
         "Description": "The cargohold is dimly lit chamber that feels both vast and claustrophobic. The space is filled with towering stacks of metal crates and containers, some secured with rusting chains, while others have toppled over, spilling their contents across the floor. The crates are marked with faded labels and symbols from various worlds and corporations, now unreadable through layers of dust.",
-        "items": ["test_item", "Keycard"],
+        "items": ["Wrench","Rations","Ammo"],
         "enemies": [],
         "connections": ["Airlock", "Armoury"]
     },
     "Armoury": {
         "Description": "The armoury of the abandoned space station is lined with rows of weapon racks, now mostly empty. The walls are reinforced with thick, riveted steel plates, designed to contain any accidents or breaches.",
-        "items": ["test_item"],
+        "items": ["Laser pistol", "Armoured Vest", "Helmet"],
         "enemies": [Enemy_2],
         "connections": ["Cargohold", "Hallway"]
     },
     "Medbay": {
         "Description": "The medbay The once-sterile environment is now tainted by decay and neglect. rows of medical beds line the room, their sheets torn and discoloured, some with ancient bloodstains that have darkened to a rusty brown. the air is thick with the smell of antiseptic mixed with the musty odour of decay.",
-        "items": ["test_item"],
+        "items": ["Medpack"],
         "enemies": [],
         "connections": ["Hallway"]
     },
     "Canteen/Crew Quarters": {
         "Description": "The canteen, once bustling with life, is now eerily silent. Metal tables and chairs are scattered haphazardly, some overturned as if left in a hurry. The once-bright LED lights flicker weakly, casting long, eerie shadows across the room.",
-        "items": ["test_item"],
+        "items": ["Rations"],
         "enemies": [Enemy_3],
         "connections": ["Hallway"]
     },
     "Control Room": {
         "Description": "The control room is large, circular, and filled with rows of consoles and control panels that once managed the entire stations operations. Now, these consoles are lifeless, their screens cracked or completely dark, covered in a thick layer of dust.",
-        "items": ["test_item"],
+        "items": ["Alien Egg"],
         "enemies": [Enemy_Boss],
         "connections": ["Hallway"],
         "Requied Keycard": True
@@ -250,7 +250,14 @@ def is_player_dead():
         return False
     
 def is_enemy_dead():
-    if Enemy_1["Health"] or Enemy_2["Health"] or Enemy_3["Health"] <= 0:
+    if Enemy_1["Health"] <= 0:
+        Player["Inventory"].extend(Enemy_1["Inventory"])
+        return True
+    elif Enemy_2["Health"] <= 0:
+        Player["Inventory"].extend(Enemy_2["Inventory"])
+        return True
+    elif Enemy_3["Health"] <= 0:
+        Player["Inventory"].extend(Enemy_3["Inventory"])
         return True
     else:
         return False
@@ -297,7 +304,7 @@ def move_to_room(new_room):
         type_out("\n")
         
     if current_room == "Control Room":
-        if "Keycard" in Player["Inventory"]:   # checks if you have the keycard to enter the control room
+        if "Control Room Keycard" in Player["Inventory"]:   # checks if you have the keycard to enter the control room
             type_out("You enter the control room and find the enemy boss.")
             type_out("\n")
             time.sleep(1)
@@ -377,10 +384,10 @@ def start_game():     # start the game
             if item in Player["Inventory"]:    
                 type_out("You use the " + item + ".")
                 Player["Inventory"].remove(item)
-                if item == "medpack":
+                if item == "Medpack":
                     Player["Health"] = 100
                     type_out("You have used the medpack.")
-                elif item == "weapon":
+                elif item == "Laser Pistol (Loaded)":
                     Player["Attack"] = +20
                     type_out("You have equipped the weapon.")
                 else:
@@ -397,6 +404,30 @@ def start_game():     # start the game
                 if is_player_dead():
                     type_out("You are dead.")
                     break
+        elif command == "combine":
+            if "Ammo" in Player["Inventory"] and "Laser Pistol" in Player["Inventory"]:
+                type_out("You combine the Ammo with the Laser Pistol.")
+                Player["Inventory"].remove("Ammo")
+                Player["Inventory"].remove("Laser Pistol")
+                Player["Inventory"].append("Laser Pistol (Loaded)")
+            elif "Keycard Fragment A" and "Keycard Fragment B" and "Keycard Fragment C" in Player["Inventory"]:
+                type_out("You combine Keycard Fragment A with Keycard Fragment B.")
+                Player["Inventory"].remove("Keycard Fragment A")
+                Player["Inventory"].remove("Keycard Fragment B")
+                Player["Inventory"].append("Keycard Fragment C")
+                Player["Inventory"].append("Control Room Keycard")
+        elif command == "help":   # help command
+            type_out("Commands:")
+            type_out("move - Move to a new room.")
+            type_out("stats - Display player stats.")
+            type_out("search - Search the room for items.")
+            type_out("use - Use an item from your inventory.")
+            type_out("attack - Attack the enemy.")
+            type_out("combine - Combine items in your inventory.")
+            type_out("quit - Quit the game.")
+            type_out("help - Display this help message.")
+            print("\n")
+
         else:
             print("Invalid command.")
             print("\n")
