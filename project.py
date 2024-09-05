@@ -22,7 +22,7 @@ Character_1 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Inventory": []
+    "Inventory": ["Laser Pistol", "Ammo", "Keycard Fragment A", "Keycard Fragment B", "Keycard Fragment C"]
 }
 
 Character_2 = {
@@ -322,32 +322,7 @@ def move_to_room(new_room):
             type_out("You enter the control room and find the enemy boss.")
             type_out("\n")
             time.sleep(1)
-            while True:
-                command = input("What would you like to do? ")
-                if command == "attack":
-                    attack_enemy()
-                    if is_enemy_dead():
-                        break
-                    attack_player()
-                    if is_player_dead():
-                        break
-                elif command == "use":
-                    item = input("Enter the item to use: ")
-                    if item in Player["Inventory"]:
-                        type_out("You use the " + item + ".")
-                        Player["Inventory"].remove(item)
-                        if item == "medpack":
-                            Player["Health"] = 100
-                        elif item == "weapon":
-                            Player["Attack"] = +20
-                        else:
-                            type_out("You can't use that item.")
-                    else:
-                        type_out("You don't have a " + item + ".")
-                    type_out("\n")
-                else:
-                    print("Invalid command.")
-                    print("\n")
+            display_enemy_stats()
         else:
             type_out("You need a keycard to enter the control room.")
             print("\n")
@@ -363,7 +338,7 @@ def start_game():     # start the game
     print("\n")
     time.sleep(1)
     while True:
-        command = input("What would you like to do? (""move"", ""stats"", ""search"", ""use"", ""attack"", ""combine"", ""quit"", ""help""): ").strip()
+        command = input("What would you like to do? (""move"", ""stats"", ""search"", ""use"", ""attack"",""reload"", ""combine fragments"", ""quit"", ""help""): ").strip()
         if command == "move":                                           # move to a new room command but checks which room you are in and connects too
             if current_room == "Airlock":
                 new_room = input("Enter the room to move to (Cargohold, Hallway): ")
@@ -395,21 +370,20 @@ def start_game():     # start the game
             search_room()
         elif command == "use":    
             type_out(f"Inventory: {Player['Inventory']}")
-            item = input("Enter the item to use: ").strip()
+            item = input("Enter the item to use: ").strip().capitalize()
             if item in Player["Inventory"]:    
-                type_out("You use the " + item + ".")
                 Player["Inventory"].remove(item)
                 if item == "Medpack":
                     Player["Health"] = 100
                     type_out("You have used the medpack.")
                 elif item == "Laser Pistol (Loaded)":
-                    Player["Attack"] = +20
+                    Player["Attack"] += 20
                     type_out("You have equipped the weapon.")
                 elif item == "Armoured Vest":
-                    Player["Defence"] = +20
+                    Player["Defence"] += 20
                     type_out("You have equipped the armour.")
                 elif item == "Helmet":
-                    Player["Defence"] = +5
+                    Player["Defence"] += 5
                     type_out("You have equipped the helmet.")
                 else:
                     type_out("You can't use that item.")
@@ -425,18 +399,22 @@ def start_game():     # start the game
                 if is_player_dead():
                     type_out("You are dead.")
                     break
-        elif command == "combine":
-            if "Ammo" in Player["Inventory"] and "Laser Pistol" in Player["Inventory"]:
-                type_out("You combine the Ammo with the Laser Pistol.")
+        elif command == "reload":
+            if "Ammo" in Player["Inventory"]:
                 Player["Inventory"].remove("Ammo")
-                Player["Inventory"].remove("Laser Pistol")
                 Player["Inventory"].append("Laser Pistol (Loaded)")
-            elif "Keycard Fragment A" and "Keycard Fragment B" and "Keycard Fragment C" in Player["Inventory"]:
-                type_out("You combine Keycard Fragment A with Keycard Fragment B.")
+                type_out("You have reloaded your weapon.")
+            else:
+                type_out("You don't have any ammo.")
+        elif command == "combine fragments":
+            if "Keycard Fragment A" in Player["Inventory"] and "Keycard Fragment B" in Player["Inventory"] and "Keycard Fragment C" in Player["Inventory"]:
+                type_out("You combine Keycard Fragment A, Keycard Fragment B, and Keycard Fragment C.")
                 Player["Inventory"].remove("Keycard Fragment A")
                 Player["Inventory"].remove("Keycard Fragment B")
-                Player["Inventory"].append("Keycard Fragment C")
+                Player["Inventory"].remove("Keycard Fragment C")
                 Player["Inventory"].append("Control Room Keycard")
+            else:
+                type_out("One or more items are not in your inventory.")
         elif command == "help":   # help command
             type_out("Commands:")
             type_out("move - Move to a new room.")
@@ -444,7 +422,8 @@ def start_game():     # start the game
             type_out("search - Search the room for items or enemies.")
             type_out("use - Use an item from your inventory.")
             type_out("attack - Attack the enemy.")
-            type_out("combine - Combine items in your inventory.")
+            type_out("reload - Reload your weapon.")
+            type_out("combine fragments - Combine keycard fragments.")
             type_out("quit - Quit the game.")
             type_out("help - Display this help message.")
             print("\n")
