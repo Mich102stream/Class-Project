@@ -14,7 +14,6 @@ Player = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
@@ -23,7 +22,6 @@ Character_1 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
@@ -32,7 +30,6 @@ Character_2 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
@@ -42,7 +39,6 @@ Character_3 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
@@ -54,7 +50,6 @@ Enemy_1 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
@@ -63,7 +58,6 @@ Enemy_2 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
@@ -72,7 +66,6 @@ Enemy_3 = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
@@ -81,49 +74,48 @@ Enemy_Boss = {
     "Health": 100,
     "Attack": 50,
     "Defence": 20,
-    "Coins": 0,
     "Inventory": []
 }
 
 Space_station = {
     "Airlock": {
-        "Description": "You are in the airlock. You can go to the hallway or the cargohold.",
+        "Description": "The airlock consists of two heavy, reinforced doors, each a solid slab of metal with a network of deep rivets and reinforced joints. The outer door is slightly ajar, creaking as it swings on its rusted hinges. The inner door of the airlock is slightly closed, but its seals are visibly worn and cracked. A large control panel is mounted beside the inner door, its once-digital display now shattered, the buttons and switches all unresponsive.",
         "items": ["test_item", "medpack"],
         "enemies": [Enemy_1],
         "connections": ["Hallway", "Cargohold"]
     },
     "Hallway": {
-        "Description": "You are in the hallway. You can go to the control room, medbay or the airlock.",
+        "Description": "The hallway of the abandoned space station stretches out in eerie silence Cables and wires hang loosely from open panels in the ceiling. The walls, once pristine and white, are now stained with patches of blood and peeling paint.",
         "items": ["test_item"],
         "enemies": [],
         "connections": ["Armoury", "Medbay", "Airlock","Canteen/Crew Quarters", "Control Room"]
     },
     "Cargohold": {
-        "Description": "You are in the cargohold. You can go to the airlock or the armoury.",
+        "Description": "The cargohold is dimly lit chamber that feels both vast and claustrophobic. The space is filled with towering stacks of metal crates and containers, some secured with rusting chains, while others have toppled over, spilling their contents across the floor. The crates are marked with faded labels and symbols from various worlds and corporations, now unreadable through layers of dust.",
         "items": ["test_item", "Keycard"],
         "enemies": [],
         "connections": ["Airlock", "Armoury"]
     },
     "Armoury": {
-        "Description": "You are in the armoury. You can go to the cargohold or the hallway.",
+        "Description": "The armoury of the abandoned space station is lined with rows of weapon racks, now mostly empty. The walls are reinforced with thick, riveted steel plates, designed to contain any accidents or breaches.",
         "items": ["test_item"],
         "enemies": [Enemy_2],
         "connections": ["Cargohold", "Hallway"]
     },
     "Medbay": {
-        "Description": "You are in the medbay. You can go to the hallway.",
+        "Description": "The medbay The once-sterile environment is now tainted by decay and neglect. rows of medical beds line the room, their sheets torn and discoloured, some with ancient bloodstains that have darkened to a rusty brown. the air is thick with the smell of antiseptic mixed with the musty odour of decay.",
         "items": ["test_item"],
         "enemies": [],
         "connections": ["Hallway"]
     },
     "Canteen/Crew Quarters": {
-        "Description": "You are in the canteen/crew quarters. You can go to the hallway.",
+        "Description": "The canteen, once bustling with life, is now eerily silent. Metal tables and chairs are scattered haphazardly, some overturned as if left in a hurry. The once-bright LED lights flicker weakly, casting long, eerie shadows across the room.",
         "items": ["test_item"],
         "enemies": [Enemy_3],
         "connections": ["Hallway"]
     },
     "Control Room": {
-        "Description": "You are in the control room. You can go to the hallway.",
+        "Description": "The control room is large, circular, and filled with rows of consoles and control panels that once managed the entire stations operations. Now, these consoles are lifeless, their screens cracked or completely dark, covered in a thick layer of dust.",
         "items": ["test_item"],
         "enemies": [Enemy_Boss],
         "connections": ["Hallway"],
@@ -184,7 +176,6 @@ def display_player_stats():
     type_out("Health: " + str(Player["Health"]))
     type_out("Attack: " + str(Player["Attack"]))
     type_out("Defence: " + str(Player["Defence"]))
-    type_out("Coins: " + str(Player["Coins"]))
     type_out("Inventory: " + str(Player["Inventory"]))
     
     
@@ -194,7 +185,6 @@ def display_enemy_stats():
     type_out("Health: " + str(Enemy_1["Health"]))
     type_out("Attack: " + str(Enemy_1["Attack"]))
     type_out("Defence: " + str(Enemy_1["Defence"]))
-    type_out("Coins: " + str(Enemy_1["Coins"]))
     type_out("Inventory: " + str(Enemy_1["Inventory"]))
     
 def display_current_map():
@@ -295,9 +285,13 @@ def search_room():
 def move_to_room(new_room):
     global current_room
     global Space_station
+    new_room = new_room.capitalize()
     if new_room in Space_station[current_room]["connections"]:
         current_room = new_room
         display_current_map()
+        type_out("You move to " + new_room + ".")
+        print("\n")
+        type_out(Space_station[new_room]["Description"])
     else:
         type_out("You can't move to " + new_room)
         type_out("\n")
@@ -343,6 +337,8 @@ def start_game():     # start the game
     choose_character()  # choose a character
     display_current_map()   # type_outs the map of the space station X marking spot of player.
     display_player_stats()  # displays the player stats
+    type_out("You Enter the Airlock.")
+    type_out(Space_station[current_room]["Description"])
     time.sleep(1)
     while True:
         command = input("What would you like to do? ")
@@ -375,8 +371,23 @@ def start_game():     # start the game
             break
         elif command == "search":  # search the room for items
             search_room()
-        elif command == "use":    # allows you to use a item in inventory
-            
+        elif command == "use":    
+            type_out(f"Inventory: {Player['Inventory']}")
+            item = input("Enter the item to use: ").strip()
+            if item in Player["Inventory"]:    
+                type_out("You use the " + item + ".")
+                Player["Inventory"].remove(item)
+                if item == "medpack":
+                    Player["Health"] = 100
+                    type_out("You have used the medpack.")
+                elif item == "weapon":
+                    Player["Attack"] = +20
+                    type_out("You have equipped the weapon.")
+                else:
+                    type_out("You can't use that item.")
+            else:
+                type_out("You don't have a " + item + ".")
+            type_out("\n")
         elif command == "attack":   # attack the enemy
             attack_enemy()
             if is_enemy_dead():
