@@ -390,6 +390,12 @@ def start_game():     # start the game
                 elif item == "Laser Pistol (Loaded)":
                     Player["Attack"] = +20
                     type_out("You have equipped the weapon.")
+                elif item == "Armoured Vest":
+                    Player["Defence"] = +20
+                    type_out("You have equipped the armour.")
+                elif item == "Helmet":
+                    Player["Defence"] = +5
+                    type_out("You have equipped the helmet.")
                 else:
                     type_out("You can't use that item.")
             else:
