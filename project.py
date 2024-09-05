@@ -274,15 +274,15 @@ def is_player_dead():
         return False
     
 def is_enemy_dead():
-    if Enemy_1["Health"] <= 0:
+    if Enemy_1["Health"] <= 0 and Enemy_1 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_1["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_1)
         return True
-    elif Enemy_2["Health"] <= 0:
+    elif Enemy_2["Health"] <= 0 and Enemy_2 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_2["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_2)
         return True
-    elif Enemy_3["Health"] <= 0:
+    elif Enemy_3["Health"] <= 0 and Enemy_3 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_3["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_3)
         return True
@@ -352,7 +352,7 @@ def start_game():     # start the game
     print("\n")
     time.sleep(1)
     while True:
-        command = input("What would you like to do? (""move"", ""stats"", ""search"", ""use"", ""attack"",""reload"", ""combine fragments"", ""quit"", ""help""): ").strip()
+        command = input("What would you like to do? (""move"", ""stats"", ""search"", ""use"", ""attack"", ""reload"", ""combine fragments"", ""quit"", ""help""): ").strip()
         if command == "move":                                           # move to a new room command but checks which room you are in and connects too
             if current_room == "Airlock":
                 new_room = input("Enter the room to move to (Cargohold, Hallway): ")
@@ -383,26 +383,30 @@ def start_game():     # start the game
         elif command == "search":  # search the room for items
             search_room()
         elif command == "use":    
-            type_out(f"Inventory: {Player['Inventory']}")
-            item = input("Enter the item to use: ").strip().capitalize()
-            if item in Player["Inventory"]:    
-                Player["Inventory"].remove(item)
-                if item == "Medpack":
-                    Player["Health"] = 100
-                    type_out("You have used the medpack.")
-                elif item == "Laser Pistol (Loaded)":
-                    Player["Attack"] += 20
-                    type_out("You have equipped the weapon.")
-                elif item == "Armoured Vest":
-                    Player["Defence"] += 20
-                    type_out("You have equipped the armour.")
-                elif item == "Helmet":
-                    Player["Defence"] += 5
-                    type_out("You have equipped the helmet.")
-                else:
-                    type_out("You can't use that item.")
+            type_out("Inventory:")
+            for i, item in enumerate(Player['Inventory'], 1):
+                type_out(f"{i}. {item}")
+            item_number = input("Enter the number of the item to use: ")
+            item_number = int(item_number)
+            if item_number > 0 and item_number <= len(Player['Inventory']):
+                    item = Player['Inventory'][item_number - 1]
+                    Player['Inventory'].remove(item)
+                    if item == "Medpack":
+                        Player["Health"] = 100
+                        type_out("You have used the medpack.")
+                    elif item == "Laser Pistol (Loaded)":
+                        Player["Attack"] += 20
+                        type_out("You have equipped the weapon.")
+                    elif item == "Armoured Vest":
+                        Player["Defence"] += 20
+                        type_out("You have equipped the armour.")
+                    elif item == "Helmet":
+                        Player["Defence"] += 5
+                        type_out("You have equipped the helmet.")
+                    else:
+                        type_out("You can't use that item.")
             else:
-                type_out("You don't have a " + item + ".")
+                    type_out("Invalid item number.")
             type_out("\n")
         elif command == "attack":   # attack the enemy
             attack_enemy()
@@ -416,6 +420,10 @@ def start_game():     # start the game
         elif command == "reload":
             if "Ammo" in Player["Inventory"]:
                 Player["Inventory"].remove("Ammo")
+                if "Laser Pistol" in Player["Inventory"]:
+                    Player["Inventory"].remove("Laser Pistol")
+                else:
+                    type_out("You don't have a Laser Pistol in your inventory.")
                 Player["Inventory"].append("Laser Pistol (Loaded)")
                 type_out("You have reloaded your weapon.")
             else:
