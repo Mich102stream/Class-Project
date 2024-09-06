@@ -259,6 +259,7 @@ def reset_enemies():
 
 def is_player_dead():
     if Player["Health"] <= 0:
+        type_out("You are dead.")
         return True
     else:
         return False
@@ -317,6 +318,8 @@ def attack_player():
         Player["Health"] -= Enemy_attack
         type_out("Enemy attacks player for " + str(Enemy_attack) + " damage.")
         print("\n")
+    else:
+        is_enemy_dead()
     if is_player_dead():
         return
     time.sleep(1)
