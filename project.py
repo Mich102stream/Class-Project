@@ -19,27 +19,30 @@ Player = {
 
 Character_1 = {
     "Name": "Ronan",
-    "Health": 100,
-    "Attack": 50,
-    "Defence": 20,
-    "Inventory": ["Laser Pistol", "Ammo", "Keycard Fragment A", "Keycard Fragment B", "Keycard Fragment C"]
+    "Health": 120,
+    "Attack": 65,
+    "Defence": 25,
+    "Inventory": ["Laser Pistol", "Ammo", "Rations", "Credit Chip", "Wrench"],
+    "Description": """Ronan is a seasoned space marine, with a rugged, weathered face and a steely gaze."""
 }
 
 Character_2 = {
     "Name": "Julia",
-    "Health": 100,
-    "Attack": 50,
-    "Defence": 20,
-    "Inventory": []
+    "Health": 120,
+    "Attack": 60,
+    "Defence": 25,
+    "Inventory": ["Medpack", "Rations", "Wrench"],
+    "Description": """Julia is a skilled engineer, with a sharp mind and a quick wit."""
 }
 
 
 Character_3 = {
     "Name": "Lee",
-    "Health": 100,
-    "Attack": 50,
-    "Defence": 20,
-    "Inventory": []
+    "Health": 120,
+    "Attack": 70,
+    "Defence": 30,
+    "Inventory": ["Laser Pistol", "Rations", "Helmet"],
+    "Description": """Lee is a former soldier, with a strong build and a no-nonsense attitude."""
 }
 
 
@@ -47,33 +50,33 @@ Character_3 = {
 
 Enemy_1 = {
     "Name": "Patrick",
-    "Health": 100,
-    "Attack": 50,
-    "Defence": 20,
-    "Inventory": ["Keycard Fragment A"]
+    "Health": 150,
+    "Attack": 70,
+    "Defence": 30,
+    "Inventory": ["Keycard Fragment A", "Medpack"]
 }
 
 Enemy_2 = {
     "Name": "Tristan",
-    "Health": 100,
-    "Attack": 50,
-    "Defence": 20,
-    "Inventory": ["Keycard Fragment B"]
+    "Health": 150,
+    "Attack": 70,
+    "Defence": 30,
+    "Inventory": ["Keycard Fragment B", "Ammo", "Medpack"]
 }
 
 Enemy_3 = {
     "Name": "Kyle",
-    "Health": 100,
-    "Attack": 50,
-    "Defence": 20,
-    "Inventory": ["Keycard Fragment C"]
+    "Health": 150,
+    "Attack": 70,
+    "Defence": 30,
+    "Inventory": ["Keycard Fragment C", "Medpack", "Rations"]
 }
 
 Enemy_Boss = {
     "Name": "Michael",
-    "Health": 100,
-    "Attack": 50,
-    "Defence": 20,
+    "Health": 300,
+    "Attack": 100,
+    "Defence": 50,
     "Inventory": ["Alien Egg"]
 }
 
@@ -177,7 +180,9 @@ def choose_character():
         choose_character()
         
     type_out("You have chosen " + Player["Name"] + ".")
-    type_out("\n")
+    print("\n")
+    type_out(Player["Description"])
+    print("\n")
     time.sleep(1)
     
     return Player
@@ -255,36 +260,47 @@ def attack_enemy():
     Enemy_1["Health"] -= Player_attack
     type_out("Player attacks enemy for " + str(Player_attack) + " damage.")
     type_out("\n")
-    time.sleep(1)
-    
-def attack_player():
-    Enemy_attack = Enemy_1["Attack"] - Player["Defence"]
-    if Enemy_attack < 0:
-        Enemy_attack = 0
-    Player["Health"] -= Enemy_attack
-    type_out("Enemy attacks player for " + str(Enemy_attack) + " damage.")
-    type_out("\n")
+    print(f"Enemy_1 Health after attack: {Enemy_1['Health']}")  # Debug print
+    is_enemy_dead()
     time.sleep(1)
 
-    
+def attack_player():
+    if Enemy_1["Health"] > 0:  
+        Enemy_attack = Enemy_1["Attack"] - Player["Defence"]
+        if Enemy_attack < 0:
+            Enemy_attack = 0
+        Player["Health"] -= Enemy_attack
+        type_out("Enemy attacks player for " + str(Enemy_attack) + " damage.")
+        type_out("\n")
+        is_player_dead()
+        time.sleep(1)
+
 def is_player_dead():
     if Player["Health"] <= 0:
         return True
     else:
         return False
-    
+
 def is_enemy_dead():
     if Enemy_1["Health"] <= 0 and Enemy_1 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_1["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_1)
+        print("Enemy_1 is dead and removed from the room.")  # Debug print
         return True
     elif Enemy_2["Health"] <= 0 and Enemy_2 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_2["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_2)
+        print("Enemy_2 is dead and removed from the room.")  # Debug print
         return True
     elif Enemy_3["Health"] <= 0 and Enemy_3 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_3["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_3)
+        print("Enemy_3 is dead and removed from the room.")  # Debug print
+        return True
+    elif Enemy_Boss["Health"] <= 0 and Enemy_Boss in Space_station[current_room]["enemies"]:
+        Player["Inventory"].extend(Enemy_Boss["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_Boss)
+        print("Enemy_Boss is dead and removed from the room.")  # Debug print
         return True
     else:
         return False
@@ -342,12 +358,15 @@ def move_to_room(new_room):
             print("\n")
         
 def start_game():     # start the game
+    print("\n")
     type_out("Welcome to Game")  # welcome message
     print("\n")
     choose_character()  # choose a character
     display_current_map()   # type_outs the map of the space station X marking spot of player.
     display_player_stats()  # displays the player stats
+    print("\n")
     type_out("You Enter the Airlock.")
+    print("\n")
     type_out(Space_station[current_room]["Description"])
     print("\n")
     time.sleep(1)
@@ -403,6 +422,11 @@ def start_game():     # start the game
                     elif item == "Helmet":
                         Player["Defence"] += 5
                         type_out("You have equipped the helmet.")
+                    elif item == "Rations":
+                        Player["Health"] += 20
+                        type_out("You have eaten the rations.")
+                    elif item == "Alien Egg":
+                        type_out("Alien Egg shakes and cracks open, revealing a strange creature that runs away.")
                     else:
                         type_out("You can't use that item.")
             else:
