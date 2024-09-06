@@ -90,7 +90,7 @@ Space_station = {
         The inner door of the airlock is slightly closed, but its seals are visibly worn and cracked. 
         A large control panel is mounted beside the inner door, its once-digital display now shattered, the buttons and switches all unresponsive.""",
         "items": ["Helmet", "medpack"],
-        "enemies": [Enemy_1],
+        "enemies": [],
         "connections": ["Hallway", "Cargohold"]
     },
     "Hallway": {
@@ -270,19 +270,23 @@ def is_enemy_dead():
     if Enemy_1["Health"] <= 0 and Enemy_1 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_1["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_1)
+        print(f"{Enemy_1['Name']} is dead and removed from the room.")
         enemy_found = False  
     elif Enemy_2["Health"] <= 0 and Enemy_2 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_2["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_2)
+        print(f"{Enemy_2['Name']} is dead and removed from the room.") 
         enemy_found = False  
     elif Enemy_3["Health"] <= 0 and Enemy_3 in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_3["Inventory"])
-        Space_station[current_room]["enemies"].remove(Enemy_3) 
+        Space_station[current_room]["enemies"].remove(Enemy_3)
+        print(f"{Enemy_3['Name']} is dead and removed from the room.")
         enemy_found = False  
     elif Enemy_Boss["Health"] <= 0 and Enemy_Boss in Space_station[current_room]["enemies"]:
         Player["Inventory"].extend(Enemy_Boss["Inventory"])
-        Space_station[current_room]["enemies"].remove(Enemy_Boss)  
-        enemy_found = False 
+        Space_station[current_room]["enemies"].remove(Enemy_Boss)
+        print(f"{Enemy_Boss['Name']} is dead and removed from the room.") 
+        enemy_found = False  
 
 def attack_enemy():
     global enemy_found
