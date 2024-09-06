@@ -2,7 +2,6 @@ import random
 import time
 import sys
 
-
 # Game Variables
 
 current_room = "Airlock"
@@ -242,13 +241,13 @@ def display_current_map():
     print("                                            Control Room")                                                  
 
 def reset_enemies():
-    if Enemy_1["Health"] == 100:
+    if Enemy_1["Health"] == 150:
         Space_station["Airlock"]["enemies"].append(Enemy_1)
-    if Enemy_2["Health"] == 100:
+    if Enemy_2["Health"] == 150:
         Space_station["Armoury"]["enemies"].append(Enemy_2)
-    if Enemy_3["Health"] == 100:
+    if Enemy_3["Health"] == 150:
         Space_station["Canteen/Crew Quarters"]["enemies"].append(Enemy_3)
-    if Enemy_Boss["Health"] == 100:
+    if Enemy_Boss["Health"] == 300:
         Space_station["Control Room"]["enemies"].append(Enemy_Boss)
     else:
         pass
@@ -257,6 +256,10 @@ def attack_enemy():
     Player_attack = Player["Attack"] - Enemy_1["Defence"]
     if Player_attack < 0:
         Player_attack = 0
+    crit_chance = random.randint(1, 10)
+    if crit_chance <= 3:  
+        Player_attack *= 2  
+        type_out("Player lands a critical hit!")
     Enemy_1["Health"] -= Player_attack
     type_out("Player attacks enemy for " + str(Player_attack) + " damage.")
     type_out("\n")
