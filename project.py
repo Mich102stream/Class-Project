@@ -422,7 +422,7 @@ def start_game():     # start the game
                     item = Player['Inventory'][item_number - 1]
                     Player['Inventory'].remove(item)
                     if item == "Medpack":
-                        Player["Health"] = 100
+                        Player["Health"] += 100
                         type_out("You have used the medpack.")
                     elif item == "Laser Pistol (Loaded)":
                         Player["Attack"] += 20
