@@ -19,7 +19,7 @@ Player = {
 Character_1 = {
     "Name": "Ronan",
     "Health": 120,
-    "Attack": 65,
+    "Attack": 165,
     "Defence": 25,
     "Inventory": ["Laser Pistol", "Ammo", "Rations", "Credit Chip", "Wrench"],
     "Description": """Ronan is a seasoned space marine, with a rugged, weathered face and a steely gaze."""
@@ -256,8 +256,42 @@ def reset_enemies():
     else:
         pass
 
+
+def is_player_dead():
+    if Player["Health"] <= 0:
+        return True
+    else:
+        return False
+
+enemy_found = False
+
+def is_enemy_dead():
+    global enemy_found
+    if Enemy_1["Health"] <= 0 and Enemy_1 in Space_station[current_room]["enemies"]:
+        Player["Inventory"].extend(Enemy_1["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_1)
+        enemy_found = False  
+    elif Enemy_2["Health"] <= 0 and Enemy_2 in Space_station[current_room]["enemies"]:
+        Player["Inventory"].extend(Enemy_2["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_2)
+        enemy_found = False  
+    elif Enemy_3["Health"] <= 0 and Enemy_3 in Space_station[current_room]["enemies"]:
+        Player["Inventory"].extend(Enemy_3["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_3) 
+        enemy_found = False  
+    elif Enemy_Boss["Health"] <= 0 and Enemy_Boss in Space_station[current_room]["enemies"]:
+        Player["Inventory"].extend(Enemy_Boss["Inventory"])
+        Space_station[current_room]["enemies"].remove(Enemy_Boss)  
+        enemy_found = False 
+
 def attack_enemy():
-    Player_attack = Player["Attack"] - Enemy_1["Defence"]
+    global enemy_found
+    if not enemy_found:
+        type_out("You need to search the room and find the enemy before attacking.")
+        print("\n")
+        return
+    else: # Debug print
+        Player_attack = Player["Attack"] - Enemy_1["Defence"]
     if Player_attack < 0:
         Player_attack = 0
     crit_chance = random.randint(1, 10)
@@ -265,9 +299,9 @@ def attack_enemy():
         Player_attack *= 2  
         type_out("Player lands a critical hit!")
     Enemy_1["Health"] -= Player_attack
+    if Enemy_1["Health"] < 0:
+        Enemy_1["Health"] = 0  # enemy health does not go below zero
     type_out("Player attacks enemy for " + str(Player_attack) + " damage.")
-    print("\n")
-    print(f"Enemy_1 Health after attack: {Enemy_1['Health']}")  # Debug print
     is_enemy_dead()
     time.sleep(1)
 
@@ -279,65 +313,35 @@ def attack_player():
         Player["Health"] -= Enemy_attack
         type_out("Enemy attacks player for " + str(Enemy_attack) + " damage.")
         print("\n")
-        is_player_dead()
-        time.sleep(1)
-
-def is_player_dead():
-    if Player["Health"] <= 0:
-        return True
-    else:
-        return False
-
-def is_enemy_dead():
-    if Enemy_1["Health"] <= 0 and Enemy_1 in Space_station[current_room]["enemies"]:
-        Player["Inventory"].extend(Enemy_1["Inventory"])
-        Space_station[current_room]["enemies"].remove(Enemy_1)
-        print("Enemy_1 is dead and removed from the room.")  # Debug print
-        return True
-    elif Enemy_2["Health"] <= 0 and Enemy_2 in Space_station[current_room]["enemies"]:
-        Player["Inventory"].extend(Enemy_2["Inventory"])
-        Space_station[current_room]["enemies"].remove(Enemy_2)
-        print("Enemy_2 is dead and removed from the room.")  # Debug print
-        return True
-    elif Enemy_3["Health"] <= 0 and Enemy_3 in Space_station[current_room]["enemies"]:
-        Player["Inventory"].extend(Enemy_3["Inventory"])
-        Space_station[current_room]["enemies"].remove(Enemy_3)
-        print("Enemy_3 is dead and removed from the room.")  # Debug print
-        return True
-    elif Enemy_Boss["Health"] <= 0 and Enemy_Boss in Space_station[current_room]["enemies"]:
-        Player["Inventory"].extend(Enemy_Boss["Inventory"])
-        Space_station[current_room]["enemies"].remove(Enemy_Boss)
-        print("Enemy_Boss is dead and removed from the room.")  # Debug print
-        return True
-    else:
-        return False
+    if is_player_dead():
+        return
+    time.sleep(1)
 
 def search_room():
     global current_room
-    type_out("You search the room.")
+    global enemy_found
+    type_out("You search the room...")
     print("\n")
-    time.sleep(1)
-    items = Space_station[current_room]["items"]
-    enemies = Space_station[current_room]["enemies"]
-    
-    if items:
-        for item in items:
-            type_out("You find a " + item + ".")
+    search_result = random.randint(1, 10)
+    if search_result <= 5:  
+        if "enemies" in Space_station[current_room] and Space_station[current_room]["enemies"]:
+            enemy_found = True
+            type_out("You found an enemy!")
+            print("\n")
+            display_enemy_stats()
+        else:
+            type_out("There are no enemies here.")
+            print("\n")
+    else:  
+        if "items" in Space_station[current_room] and Space_station[current_room]["items"]:
+            item = random.choice(Space_station[current_room]["items"])
+            type_out("You found a " + item + ".")
             print("\n")
             Player["Inventory"].append(item)
-            items.remove(item)
-            type_out("Could be more things to find, keep searching.")
-    else:
-        type_out("You find nothing.")
-        print("\n")
-    
-    if enemies:
-        for enemy in enemies:
-            type_out("You encounter an enemy: " + enemy["Name"] + ".")
+            Space_station[current_room]["items"].remove(item)
+        else:
+            type_out("There are no items here.")
             print("\n")
-            type_out(enemy["Description"])
-            print("\n")
-            enemies.remove(enemy)
 
 
 def move_to_room(new_room):
