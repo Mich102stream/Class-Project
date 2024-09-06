@@ -201,12 +201,18 @@ def display_player_stats():
     
     
 def display_enemy_stats():
-    type_out("Enemy Stats:")
-    type_out("Name: " + Enemy_1["Name"])
-    type_out("Health: " + str(Enemy_1["Health"]))
-    type_out("Attack: " + str(Enemy_1["Attack"]))
-    type_out("Defence: " + str(Enemy_1["Defence"]))
-    type_out("Inventory: " + str(Enemy_1["Inventory"]))
+    global current_room
+    if "enemies" in Space_station[current_room] and Space_station[current_room]["enemies"]:
+        type_out("Enemies in the room:")
+        for enemy in Space_station[current_room]["enemies"]:
+            type_out("Name: " + enemy["Name"])
+            type_out("Health: " + str(enemy["Health"]))
+            type_out("Attack: " + str(enemy["Attack"]))
+            type_out("Defence: " + str(enemy["Defence"]))
+            type_out("Inventory: " + str(enemy["Inventory"]))
+            print("\n")
+    else:
+        type_out("There are no enemies in this room.")
     
 def display_current_map():
     map_layout = ["Airlock", "Cargohold", "Armoury", "Hallway", "Medbay", "Canteen/Crew Quarters", "Control Room"]
@@ -247,10 +253,16 @@ def display_current_map():
 def reset_enemies():
     if Enemy_1["Health"] == 150:
         Space_station["Airlock"]["enemies"].append(Enemy_1)
+    else:
+        pass
     if Enemy_2["Health"] == 150:
         Space_station["Armoury"]["enemies"].append(Enemy_2)
+    else:
+        pass
     if Enemy_3["Health"] == 150:
         Space_station["Canteen/Crew Quarters"]["enemies"].append(Enemy_3)
+    else:
+        pass
     if Enemy_Boss["Health"] == 300:
         Space_station["Control Room"]["enemies"].append(Enemy_Boss)
     else:
@@ -361,7 +373,7 @@ def move_to_room(new_room):
     new_room = room_aliases.get(new_room.lower(), new_room.capitalize())
     if new_room in Space_station[current_room]["connections"]:
         current_room = new_room
-        reset_enemies()
+       # reset_enemies()
         display_current_map()
         type_out("You move to " + new_room + ".")
         print("\n")
