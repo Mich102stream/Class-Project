@@ -143,7 +143,7 @@ Space_station = {
 
 }
 
-def type_out(text, delay=0.03):
+def type_out(text, delay=0.01):
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
@@ -302,34 +302,37 @@ def is_enemy_dead():
         enemy_found = False  
 
 def attack_enemy():
-    global enemy_found
-    if not enemy_found:
+    enemy = Space_station[current_room]["enemies"]
+    if not enemy:
         type_out("You need to search the room and find the enemy before attacking.")
         print("\n")
         return
     else: 
-        Player_attack = Player["Attack"] - Enemy_1["Defence"]
-    if Player_attack < 0:
-        Player_attack = 0
-    crit_chance = random.randint(1, 10)
-    if crit_chance <= 3:  
-        Player_attack *= 2  
-        type_out("Player lands a critical hit!")
-    Enemy_1["Health"] -= Player_attack
-    if Enemy_1["Health"] < 0:
-        Enemy_1["Health"] = 0  # enemy health does not go below zero
-    type_out("Player attacks enemy for " + str(Player_attack) + " damage.")
-    is_enemy_dead()
-    time.sleep(1)
+        for enemy in enemy:
+            Player_attack = Player["Attack"] - enemy["Defence"]
+            if Player_attack < 0:
+                Player_attack = 0
+            crit_chance = random.randint(1, 10)
+            if crit_chance <= 3:  
+                Player_attack *= 2  
+                type_out("Player lands a critical hit!")
+            enemy["Health"] -= Player_attack
+            if enemy["Health"] < 0:
+                enemy["Health"] = 0  # enemy health does not go below zero
+            type_out("Player attacks enemy for " + str(Player_attack) + " damage.")
+            is_enemy_dead()
+            time.sleep(1)
 
 def attack_player():
-    if Enemy_1["Health"] > 0:  
-        Enemy_attack = Enemy_1["Attack"] - Player["Defence"]
-        if Enemy_attack < 0:
-            Enemy_attack = 0
-        Player["Health"] -= Enemy_attack
-        type_out("Enemy attacks player for " + str(Enemy_attack) + " damage.")
-        print("\n")
+    enemies = Space_station[current_room]["enemies"]
+    if enemies and enemies[0]["Health"] > 0:  
+        for enemy in enemies:
+            Enemy_attack = enemy["Attack"] - Player["Defence"]
+            if Enemy_attack < 0:
+                Enemy_attack = 0
+            Player["Health"] -= Enemy_attack
+            type_out("Enemy " + enemy["Name"] + " attacks player for " + str(Enemy_attack) + " damage.")
+            print("\n")
     else:
         is_enemy_dead()
     if is_player_dead():
@@ -509,7 +512,8 @@ def start_game():     # start the game
             type_out("quit - Quit the game.")
             type_out("help - Display this help message.")
             print("\n")
-
+        elif command == "check":
+            display_enemy_stats()
         else:
             print("Invalid command.")
             print("\n")
