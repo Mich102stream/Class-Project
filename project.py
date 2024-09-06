@@ -294,7 +294,7 @@ def attack_enemy():
         type_out("You need to search the room and find the enemy before attacking.")
         print("\n")
         return
-    else: # Debug print
+    else: 
         Player_attack = Player["Attack"] - Enemy_1["Defence"]
     if Player_attack < 0:
         Player_attack = 0
@@ -336,6 +336,7 @@ def search_room():
         else:
             type_out("There are no enemies here.")
             print("\n")
+            return
     else:  
         if "items" in Space_station[current_room] and Space_station[current_room]["items"]:
             item = random.choice(Space_station[current_room]["items"])
@@ -346,6 +347,7 @@ def search_room():
         else:
             type_out("There are no items here.")
             print("\n")
+            return
 
 
 def move_to_room(new_room):
