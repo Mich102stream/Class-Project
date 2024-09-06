@@ -52,7 +52,8 @@ Enemy_1 = {
     "Health": 150,
     "Attack": 70,
     "Defence": 30,
-    "Inventory": ["Keycard Fragment A", "Medpack"]
+    "Inventory": ["Keycard Fragment A", "Medpack"],
+    "Description": """Patrick is a fearsome alien creature with sharp claws and a menacing presence."""
 }
 
 Enemy_2 = {
@@ -60,7 +61,8 @@ Enemy_2 = {
     "Health": 150,
     "Attack": 70,
     "Defence": 30,
-    "Inventory": ["Keycard Fragment B", "Ammo", "Medpack"]
+    "Inventory": ["Keycard Fragment B", "Ammo", "Medpack"],
+    "Description": """Tristan is a cunning alien with a slimy exterior and a venomous bite."""
 }
 
 Enemy_3 = {
@@ -68,7 +70,8 @@ Enemy_3 = {
     "Health": 150,
     "Attack": 70,
     "Defence": 30,
-    "Inventory": ["Keycard Fragment C", "Medpack", "Rations"]
+    "Inventory": ["Keycard Fragment C", "Medpack", "Rations"],
+    "Description": """Kyle is a massive alien brute with thick armor and incredible strength."""
 }
 
 Enemy_Boss = {
@@ -76,7 +79,8 @@ Enemy_Boss = {
     "Health": 300,
     "Attack": 100,
     "Defence": 50,
-    "Inventory": ["Alien Egg"]
+    "Inventory": ["Alien Egg"],
+    "Description": """Michael is the leader of the alien horde, towering over the others with a menacing presence."""
 }
 
 Space_station = {
@@ -85,7 +89,7 @@ Space_station = {
         The outer door is slightly ajar, creaking as it swings on its rusted hinges. 
         The inner door of the airlock is slightly closed, but its seals are visibly worn and cracked. 
         A large control panel is mounted beside the inner door, its once-digital display now shattered, the buttons and switches all unresponsive.""",
-        "items": ["test_item", "medpack"],
+        "items": ["Helmet", "medpack"],
         "enemies": [Enemy_1],
         "connections": ["Hallway", "Cargohold"]
     },
@@ -93,7 +97,7 @@ Space_station = {
         "Description": """The hallway of the abandoned space station stretches out in eerie silence. 
         Cables and wires hang loosely from open panels in the ceiling. 
         The walls, once pristine and white, are now stained with patches of blood and peeling paint.""",
-        "items": ["test_item"],
+        "items": ["Flashlight"],
         "enemies": [],
         "connections": ["Armoury", "Medbay", "Airlock","Canteen/Crew Quarters", "Control Room"]
     },
@@ -262,7 +266,7 @@ def attack_enemy():
         type_out("Player lands a critical hit!")
     Enemy_1["Health"] -= Player_attack
     type_out("Player attacks enemy for " + str(Player_attack) + " damage.")
-    type_out("\n")
+    print("\n")
     print(f"Enemy_1 Health after attack: {Enemy_1['Health']}")  # Debug print
     is_enemy_dead()
     time.sleep(1)
@@ -274,7 +278,7 @@ def attack_player():
             Enemy_attack = 0
         Player["Health"] -= Enemy_attack
         type_out("Enemy attacks player for " + str(Enemy_attack) + " damage.")
-        type_out("\n")
+        print("\n")
         is_player_dead()
         time.sleep(1)
 
@@ -311,7 +315,7 @@ def is_enemy_dead():
 def search_room():
     global current_room
     type_out("You search the room.")
-    type_out("\n")
+    print("\n")
     time.sleep(1)
     items = Space_station[current_room]["items"]
     enemies = Space_station[current_room]["enemies"]
@@ -319,25 +323,29 @@ def search_room():
     if items:
         for item in items:
             type_out("You find a " + item + ".")
-            type_out("\n")
+            print("\n")
             Player["Inventory"].append(item)
             items.remove(item)
             type_out("Could be more things to find, keep searching.")
     else:
         type_out("You find nothing.")
-        type_out("\n")
+        print("\n")
     
     if enemies:
         for enemy in enemies:
             type_out("You encounter an enemy: " + enemy["Name"] + ".")
-            type_out("\n")
+            print("\n")
+            type_out(enemy["Description"])
+            print("\n")
             enemies.remove(enemy)
 
 
 def move_to_room(new_room):
     global current_room
     global Space_station
-    new_room = new_room.capitalize()
+    
+    room_aliases = {"crew": "Canteen/Crew Quarters"}
+    new_room = room_aliases.get(new_room.lower(), new_room.capitalize())
     if new_room in Space_station[current_room]["connections"]:
         current_room = new_room
         reset_enemies()
@@ -348,12 +356,12 @@ def move_to_room(new_room):
         print("\n")
     else:
         type_out("You can't move to " + new_room)
-        type_out("\n")
+        print("\n")
         
     if current_room == "Control Room":
         if "Control Room Keycard" in Player["Inventory"]:   # checks if you have the keycard to enter the control room
             type_out("You enter the control room and find the enemy boss.")
-            type_out("\n")
+            print("\n")
             time.sleep(1)
             display_enemy_stats()
         else:
@@ -386,7 +394,7 @@ def start_game():     # start the game
                 new_room = input("Enter the room to move to (Cargohold, Hallway): ")
                 move_to_room(new_room)
             elif current_room == "Hallway":
-                new_room = input("Enter the room to move to (Armoury, Medbay, Airlock, Canteen/Crew Quarters, Control Room): ")
+                new_room = input("Enter the room to move to (Armoury, Medbay, Airlock, Crew (Canteen / Crew Quarters), Control Room): ")
                 move_to_room(new_room)
             elif current_room == "Medbay":
                 new_room = input("Enter the room to move to (Hallway): ")
@@ -434,7 +442,7 @@ def start_game():     # start the game
                         type_out("You can't use that item.")
             else:
                     type_out("Invalid item number.")
-            type_out("\n")
+            print("\n")
         elif command == "attack":   # attack the enemy
             attack_enemy()
             if is_enemy_dead():
