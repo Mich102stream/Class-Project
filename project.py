@@ -21,7 +21,7 @@ Character_1 = {
     "Health": 120,
     "Attack": 165,
     "Defence": 25,
-    "Inventory": ["Laser Pistol", "Ammo", "Rations", "Credit Chip", "Wrench"],
+    "Inventory": ["Laser Pistol", "Ammo", "Rations", "Credit Chip", "Wrench","Key Fragment A", "Key Fragment B", "Key Fragment C"],
     "Description": """Ronan is a seasoned space marine, with a rugged, weathered face and a steely gaze."""
 }
 
@@ -373,10 +373,15 @@ def move_to_room(new_room):
     global Space_station
     
     room_aliases = {"crew": "Canteen/Crew Quarters"}
-    new_room = room_aliases.get(new_room.lower(), new_room.capitalize())
+    new_room = room_aliases.get(new_room.lower(), new_room.title())
+    
+    # Debugging: Print the current room and its connections
+    print(f"Current Room: {current_room}")
+    print(f"Connections from {current_room}: {Space_station[current_room]['connections']}")
+    
     if new_room in Space_station[current_room]["connections"]:
         current_room = new_room
-       # reset_enemies()
+        # reset_enemies()
         display_current_map()
         type_out("You move to " + new_room + ".")
         print("\n")
@@ -387,7 +392,15 @@ def move_to_room(new_room):
         print("\n")
         
     if current_room == "Control Room":
-        if "Control Room Keycard" in Player["Inventory"]:   # checks if you have the keycard to enter the control room
+        # Debugging: Print the current inventory
+        print("Current Inventory: " + str(Player["Inventory"]))
+        
+        has_keycard = "Control Room Keycard" in Player["Inventory"]
+        
+        # Debugging: Print the status of the keycard check
+        print(f"Has Control Room Keycard: {has_keycard}")
+        
+        if has_keycard:   # checks if you have the keycard to enter the control room
             type_out("You enter the control room and find the enemy boss.")
             print("\n")
             time.sleep(1)
@@ -491,12 +504,22 @@ def start_game():     # start the game
                 type_out("You have reloaded your weapon.")
             else:
                 type_out("You don't have any ammo.")
-        elif command == "combine fragments":
-            if "Keycard Fragment A" in Player["Inventory"] and "Keycard Fragment B" in Player["Inventory"] and "Keycard Fragment C" in Player["Inventory"]:
-                type_out("You combine Keycard Fragment A, Keycard Fragment B, and Keycard Fragment C.")
-                Player["Inventory"].remove("Keycard Fragment A")
-                Player["Inventory"].remove("Keycard Fragment B")
-                Player["Inventory"].remove("Keycard Fragment C")
+        elif command == "combine": # combine keycard fragments
+            print("Current Inventory: " + str(Player["Inventory"]))
+            
+            has_fragment_a = "Key Fragment A" in Player["Inventory"]
+            has_fragment_b = "Key Fragment B" in Player["Inventory"]
+            has_fragment_c = "Key Fragment C" in Player["Inventory"]
+            
+            print(f"Has Key Fragment A: {has_fragment_a}")
+            print(f"Has Key Fragment B: {has_fragment_b}")
+            print(f"Has Key Fragment C: {has_fragment_c}")
+            
+            if has_fragment_a and has_fragment_b and has_fragment_c:
+                type_out("You combine Key Fragment A, Key Fragment B, and Key Fragment C.")
+                Player["Inventory"].remove("Key Fragment A")
+                Player["Inventory"].remove("Key Fragment B")
+                Player["Inventory"].remove("Key Fragment C")
                 Player["Inventory"].append("Control Room Keycard")
             else:
                 type_out("One or more items are not in your inventory.")
