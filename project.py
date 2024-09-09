@@ -408,7 +408,13 @@ def move_to_room(new_room):
         else:
             type_out("You need a keycard to enter the control room.")
             print("\n")
-        
+
+def you_win():
+    type_out("Congratulations! You have defeated the alien horde and saved the space station.")
+    type_out("Credits: Done Entertainment - Michael Kay, Ronan Aked, Julia Nyobe, Lee Brown, Patrick Payne, Tristan Haydon and Kyle Middleton.")
+    type_out("Thanks for playing!")
+    sys.exit()
+       
 def start_game():     # start the game
     print("\n")
     type_out("Welcome to Game")  # welcome message
@@ -479,6 +485,7 @@ def start_game():     # start the game
                         type_out("You have eaten the rations.")
                     elif item == "Alien Egg":
                         type_out("Alien Egg shakes and cracks open, revealing a strange creature that runs away.")
+                        you_win()
                     else:
                         type_out("You can't use that item.")
             else:
