@@ -21,7 +21,7 @@ Character_1 = {
     "Health": 120,
     "Attack": 165,
     "Defence": 25,
-    "Inventory": ["Laser Pistol", "Ammo", "Rations", "Credit Chip", "Wrench","Key Fragment A", "Key Fragment B", "Key Fragment C"],
+    "Inventory": ["Laser Pistol", "Ammo", "Rations", "Credit Chip", "Wrench"],
     "Description": """Ronan is a seasoned space marine, with a rugged, weathered face and a steely gaze."""
 }
 
@@ -120,7 +120,7 @@ Space_station = {
         "Description": """The medbay, once a sterile environment, is now tainted by decay and neglect. 
         Rows of medical beds line the room, their sheets torn and discoloured, some with ancient bloodstains that have darkened to a rusty brown. 
         The air is thick with the smell of antiseptic mixed with the musty odour of decay.""",
-        "items": ["Medpack"],
+        "items": ["Medpack", "Credit Chip"],
         "enemies": [],
         "connections": ["Hallway"]
     },
@@ -128,14 +128,14 @@ Space_station = {
         "Description": """The canteen, once bustling with life, is now eerily silent. 
         Metal tables and chairs are scattered haphazardly, some overturned as if left in a hurry. 
         The once-bright LED lights flicker weakly, casting long, eerie shadows across the room.""",
-        "items": ["Rations"],
+        "items": ["Rations", "Data Pad"],
         "enemies": [Enemy_3],
         "connections": ["Hallway"]
     },
     "Control Room": {
         "Description": """The control room is large, circular, and filled with rows of consoles and control panels that once managed the entire station's operations. 
         Now, these consoles are lifeless, their screens cracked or completely dark, covered in a thick layer of dust.""",
-        "items": ["Alien Egg"],
+        "items": ["Alien Egg", "Golden Card"],
         "enemies": [Enemy_Boss],
         "connections": ["Hallway"],
         "Required Keycard": True
@@ -483,6 +483,28 @@ def start_game():     # start the game
                     elif item == "Rations":
                         Player["Health"] += 20
                         type_out("You have eaten the rations.")
+                    elif item == "Wrench":
+                        Player["Attack"] += 10
+                        type_out("You have equipped the wrench.")
+                    elif item == "Flashlight":
+                        type_out("The flashlight flickers to life, casting a beam of light into the darkness.")
+                    elif item == "Key Fragment A":
+                        type_out("Key Fragment A is a small, metallic shard with a series of intricate symbols etched into its surface.")
+                    elif item == "Key Fragment B":
+                        type_out("Key Fragment B is a small, metallic shard with a series of intricate symbols etched into its surface.")
+                    elif item == "Key Fragment C":
+                        type_out("Key Fragment C is a small, metallic shard with a series of intricate symbols etched into its surface.")
+                    elif item == "Control Room Keycard":
+                        type_out("You have used the keycard to enter the control room.")
+                    elif item == "Ammo":
+                        type_out("Try using the reload command to reload your weapon.")
+                    elif item == "Credit Chip":
+                        type_out("The credit chip is a small, metallic disc with a series of numbers etched into its surface.")
+                    elif item == "Golden Card":
+                        type_out("The golden card is a small, metallic disc with a series of numbers etched into its surface, and a golden sheen.")
+                    elif item == "Data Pad":
+                        type_out("The data pad is a small, handheld device with a touch screen display and a series of buttons.")
+                        type_out("The screen flickers to life, displaying a series of symbols and numbers.")
                     elif item == "Alien Egg":
                         type_out("Alien Egg shakes and cracks open, revealing a strange creature that runs away.")
                         you_win()
