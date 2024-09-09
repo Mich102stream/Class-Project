@@ -1,3 +1,7 @@
+# Author: Done Entertainment
+# Description: An abandoned space station RPG by Done Entertainment.
+
+# Importing Libraries
 import random
 import time
 import sys
@@ -15,6 +19,8 @@ Player = {
     "Defence": 20,
     "Inventory": []
 }
+
+# Character Stats
 
 Character_1 = {
     "Name": "Ronan",
@@ -47,7 +53,7 @@ Character_3 = {
 
 # Enemy Stats
 
-Enemy_1 = {
+Enemy_1 = {  # Enemy Stats
     "Name": "Patrick",
     "Health": 150,
     "Attack": 70,
@@ -83,7 +89,7 @@ Enemy_Boss = {
     "Description": """Michael is the leader of the alien horde, towering over the others with a menacing presence."""
 }
 
-Space_station = {
+Space_station = {   # Space Station Layout
     "Airlock": {
         "Description": """The airlock consists of two heavy, reinforced doors, each a solid slab of metal with a network of deep rivets and reinforced joints. 
         The outer door is slightly ajar, creaking as it swings on its rusted hinges. 
@@ -143,7 +149,7 @@ Space_station = {
 
 }
 
-def type_out(text, delay=0.01):
+def type_out(text, delay=0.01):  # types out the text
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
@@ -151,7 +157,7 @@ def type_out(text, delay=0.01):
     print() 
 
 
-def main_menu():
+def main_menu():  # main menu
     type_out("Welcome to the Abandoned.")
     type_out("An abandoned space station RPG by Done Entertainment.")
     type_out("1. Start Game")
@@ -165,7 +171,7 @@ def main_menu():
         type_out("Invalid choice.")
         main_menu()
         
-def choose_character():
+def choose_character():  # choose a character
     global Player
     type_out("Choose a character:")
     type_out("1. " + Character_1["Name"])
@@ -190,7 +196,7 @@ def choose_character():
     
     return Player
 
-def display_player_stats():
+def display_player_stats():  # displays the player stats
     global Player
     type_out("Player Stats:")
     type_out("Name: " + Player["Name"])
@@ -200,7 +206,7 @@ def display_player_stats():
     type_out("Inventory: " + str(Player["Inventory"]))
     
     
-def display_enemy_stats():
+def display_enemy_stats():  # displays the enemy stats
     global current_room
     if "enemies" in Space_station[current_room] and Space_station[current_room]["enemies"]:
         type_out("Enemies in the room:")
@@ -214,7 +220,7 @@ def display_enemy_stats():
     else:
         type_out("There are no enemies in this room.")
     
-def display_current_map():
+def display_current_map():  # displays the map of the space station
     map_layout = ["Airlock", "Cargohold", "Armoury", "Hallway", "Medbay", "Canteen/Crew Quarters", "Control Room"]
     map = [" ", " ", " ", " ", " ", " ", " "]
     
@@ -250,7 +256,7 @@ def display_current_map():
     print("                                          -.............-.                                           ")
     print("                                            Control Room")                                                  
 
-def reset_enemies():
+def reset_enemies():  # resets the enemies in the room
     if Enemy_1["Health"] == 150:
         Space_station["Airlock"]["enemies"].append(Enemy_1)
     else:
@@ -269,7 +275,7 @@ def reset_enemies():
         pass
 
 
-def is_player_dead():
+def is_player_dead():  # checks if the player is dead
     if Player["Health"] <= 0:
         type_out("You are dead.")
         return True
@@ -278,9 +284,9 @@ def is_player_dead():
 
 enemy_found = False
 
-def is_enemy_dead():
-    global enemy_found
-    if Enemy_1["Health"] <= 0 and Enemy_1 in Space_station[current_room]["enemies"]:
+def is_enemy_dead():   # checks if the enemy is dead
+    global enemy_found 
+    if Enemy_1["Health"] <= 0 and Enemy_1 in Space_station[current_room]["enemies"]:  
         Player["Inventory"].extend(Enemy_1["Inventory"])
         Space_station[current_room]["enemies"].remove(Enemy_1)
         print(f"{Enemy_1['Name']} is dead and removed from the room.")
@@ -323,7 +329,7 @@ def attack_enemy():
             is_enemy_dead()
             time.sleep(1)
 
-def attack_player():
+def attack_player():   # enemy attacks player
     enemies = Space_station[current_room]["enemies"]
     if enemies and enemies[0]["Health"] > 0:  
         for enemy in enemies:
@@ -339,7 +345,7 @@ def attack_player():
         return
     time.sleep(1)
 
-def search_room():
+def search_room():   # search the room for items or enemies
     global current_room
     global enemy_found
     type_out("You search the room...")
@@ -368,7 +374,7 @@ def search_room():
             return
 
 
-def move_to_room(new_room):
+def move_to_room(new_room):  # move to a new room
     global current_room
     global Space_station
     
@@ -409,7 +415,7 @@ def move_to_room(new_room):
             type_out("You need a keycard to enter the control room.")
             print("\n")
 
-def you_win():
+def you_win():          # win the game
     type_out("Congratulations! You have defeated the alien horde and saved the space station.")
     type_out("Credits: Done Entertainment - Michael Kay, Ronan Aked, Julia Nyobe, Lee Brown, Patrick Payne, Tristan Haydon and Kyle Middleton.")
     type_out("Thanks for playing!")
@@ -427,9 +433,9 @@ def start_game():     # start the game
     print("\n")
     type_out(Space_station[current_room]["Description"])
     print("\n")
-    time.sleep(1)
-    while True:
-        command = input("What would you like to do? (""move"", ""stats"", ""search"", ""use"", ""attack"", ""reload"", ""combine fragments"", ""quit"", ""help""): ").strip()
+    time.sleep(1) # pauses for 1 second
+    while True:  # game loop
+        command = input("What would you like to do? (""move"", ""stats"", ""search"", ""use"", ""attack"", ""reload"", ""combine fragments"", ""quit"", ""help""): ").strip()  # command input
         if command == "move":                                           # move to a new room command but checks which room you are in and connects too
             if current_room == "Airlock":
                 new_room = input("Enter the room to move to (Cargohold, Hallway): ")
@@ -459,13 +465,13 @@ def start_game():     # start the game
             break
         elif command == "search":  # search the room for items
             search_room()
-        elif command == "use":    
+        elif command == "use":    # use an item from your inventory
             type_out("Inventory:")
             for i, item in enumerate(Player['Inventory'], 1):
                 type_out(f"{i}. {item}")
             item_number = input("Enter the number of the item to use: ")
             item_number = int(item_number)
-            if item_number > 0 and item_number <= len(Player['Inventory']):
+            if item_number > 0 and item_number <= len(Player['Inventory']):  # checks if the item number is valid
                     item = Player['Inventory'][item_number - 1]
                     Player['Inventory'].remove(item)
                     if item == "Medpack":
@@ -522,7 +528,7 @@ def start_game():     # start the game
                 if is_player_dead():
                     type_out("You are dead.")
                     break
-        elif command == "reload":
+        elif command == "reload":   # reload the weapon
             if "Ammo" in Player["Inventory"]:
                 Player["Inventory"].remove("Ammo")
                 if "Laser Pistol" in Player["Inventory"]:
@@ -536,15 +542,15 @@ def start_game():     # start the game
         elif command == "combine": # combine keycard fragments
             print("Current Inventory: " + str(Player["Inventory"]))
             
-            has_fragment_a = "Key Fragment A" in Player["Inventory"]
+            has_fragment_a = "Key Fragment A" in Player["Inventory"]  # checks if you have the keycard fragments
             has_fragment_b = "Key Fragment B" in Player["Inventory"]
             has_fragment_c = "Key Fragment C" in Player["Inventory"]
             
-            print(f"Has Key Fragment A: {has_fragment_a}")
+            print(f"Has Key Fragment A: {has_fragment_a}")  # Debugging: Print the status of the key fragments
             print(f"Has Key Fragment B: {has_fragment_b}")
             print(f"Has Key Fragment C: {has_fragment_c}")
             
-            if has_fragment_a and has_fragment_b and has_fragment_c:
+            if has_fragment_a and has_fragment_b and has_fragment_c:   # checks if you have all keycard fragments
                 type_out("You combine Key Fragment A, Key Fragment B, and Key Fragment C.")
                 Player["Inventory"].remove("Key Fragment A")
                 Player["Inventory"].remove("Key Fragment B")
@@ -554,7 +560,7 @@ def start_game():     # start the game
                 type_out("One or more items are not in your inventory.")
         elif command == "help":   # help command
             type_out("Commands:")
-            type_out("move - Move to a new room.")
+            type_out("move - Move to a new room.") 
             type_out("stats - Display player stats.")
             type_out("search - Search the room for items or enemies.")
             type_out("use - Use an item from your inventory.")
@@ -564,15 +570,15 @@ def start_game():     # start the game
             type_out("quit - Quit the game.")
             type_out("help - Display this help message.")
             print("\n")
-        elif command == "check":
+        elif command == "check":   # check command
             display_enemy_stats()
         else:
-            print("Invalid command.")
+            print("Invalid command.") # invalid command
             print("\n")
         
 
 # runs the game    
-main_menu()       
+main_menu()      # Starts the game with the main menu
 
 # End of project.py
 
